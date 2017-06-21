@@ -17,6 +17,8 @@ start()
   local logs="$PACKAGE_STORAGE/logs" &&
   mkdir -p $logs &&
   \
+  mkdir -p $PACKAGE_SOFTWARE &&
+  \
   export COUCH_NODE_NAME='couchdb@localhost' &&
   export COUCH_URL="http://gardener:$passwd@localhost:5984/medic" &&
   \
