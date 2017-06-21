@@ -3,7 +3,7 @@
 merge_environment()
 {
   local version='0.1.0'
-  local name='sentinel'
+  local name='medic-sentinel'
 
   local prefix="$1"
 
