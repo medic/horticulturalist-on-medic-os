@@ -2,8 +2,8 @@
 
 merge_environment()
 {
-  local version='0.1.0'
-  local name='medic-sentinel'
+  local version='0.0.1'
+  local name='horticulturalist'
 
   local prefix="$1"
 
@@ -15,7 +15,6 @@ merge_environment()
   export PACKAGE_SOFTWARE="$prefix/software/$name"
   export PACKAGE_SETTINGS="$prefix/settings/$name"
 
-  export WORLD='configuration data'
   return 0
 }
 

@@ -22,11 +22,11 @@ start()
   export COUCH_NODE_NAME='couchdb@localhost' &&
   export COUCH_URL="http://gardener:$passwd@localhost:5984/medic" &&
   \
-  local script="server.js" &&
+  local script="src/index.js" &&
   local run_cmd="'`which node`' '$script'" &&
   \
   exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $run_cmd" gardener \
-      >> "$logs/startup.log" 2>&1
+      >> "$logs/horticulturalist.log" 2>&1
   # expecting script to be copied to $PACKAGE_SOFTWARE/current (see ../env)
   # todo running as gardener user, don't know if that's ideal
 }
