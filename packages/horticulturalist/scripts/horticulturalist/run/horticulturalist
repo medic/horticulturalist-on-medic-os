@@ -25,10 +25,10 @@ start()
   local script="src/index.js" &&
   local run_cmd="'`which node`' '$script'" &&
   \
-  exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $run_cmd" gardener \
+  exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $run_cmd" \
       >> "$logs/horticulturalist.log" 2>&1
   # expecting script to be copied to $PACKAGE_SOFTWARE/current (see ../env)
-  # todo running as gardener user, don't know if that's ideal
+  # todo running as root user, don't know if that's ideal
 }
 
 start
