@@ -6,6 +6,5 @@ DONE
 
 TODO
  - Have sentinel package clean up its directories on uninstall (utility func is not implemented).
- - run sentinel with its own user.
- - add api package.
+ - run sentinel and api with their own user and password.
  - add horticulturalist package
