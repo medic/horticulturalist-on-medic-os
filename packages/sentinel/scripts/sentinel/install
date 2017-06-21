@@ -12,12 +12,10 @@ install()
   merge_environment /srv || return 255
 
   if [ "$is_update" ]; then
-    echo "Hello, software updates!"
+    echo "Updating version $PACKAGE_VERSION"
   else
-    echo "Hello, software installation!"
+    echo "Installing version $PACKAGE_VERSION"
   fi
-
-  echo "I have version $PACKAGE_VERSION; hope that's right."
   return "$?"
 }
 

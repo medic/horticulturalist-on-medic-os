@@ -1,0 +1,35 @@
+#!/bin/sh -e
+
+start()
+{
+  echo 'sentinel runs' >> /tmp/sentinel_works
+  local self="`realpath "$0"`"
+  local base="`dirname -- "$self"`"
+
+  source "$base/../../medic-core/env" &&
+  merge_environment /srv &&
+  \
+  source "$base/../env" &&
+  merge_environment /srv &&
+  \
+  local passwd_file="$PACKAGE_STORAGE/../concierge/passwd/gardener" &&
+  local passwd=`cat $passwd_file` &&
+  \
+  local logs="$PACKAGE_STORAGE/logs" &&
+  mkdir -p $logs &&
+  \
+  export COUCH_NODE_NAME='couchdb@localhost' &&
+  export COUCH_URL="http://gardener:$passwd@localhost:5984/medic" &&
+  \
+  local sentinel="server.js" &&
+  local sentinel_cmd="'`which node`' '$sentinel'" &&
+  \
+  exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $sentinel_cmd" gardener \
+      >> "$logs/startup.log" 2>&1
+  # expecting sentinel script to be copied to $PACKAGE_SOFTWARE/current (see ../env)
+  # todo running as gardener user, don't know if that's ideal
+}
+
+start
+exit "$?"
+
