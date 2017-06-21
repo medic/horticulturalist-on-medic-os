@@ -1,0 +1,3 @@
+[submodule "packages/horticulturalist/software/current"]
+	path = packages/horticulturalist/software/current
+	url = git@github.com:medic/horticulturalist.git
