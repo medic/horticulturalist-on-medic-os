@@ -2,7 +2,7 @@
 
 random_password() #todo move this to utils somewhere
 {
-  echo 'a_random_password'
+  echo "$(openssl rand -hex 256)"
 }
 
 create_couch_user() #todo move this to utils somewhere
