@@ -1,5 +1,19 @@
 #!/bin/sh
 
+create_system_user_if_necessary()
+{
+  local user="$1"
+  shift 1
+
+  if id -u "$user" &>/dev/null; then
+    return 0
+  fi
+
+  adduser -D -H "$user"
+
+  return "$?"
+}
+
 install()
 {
   local is_update="$1"
@@ -15,10 +29,11 @@ install()
     echo "Updating version $PACKAGE_VERSION"
   else
     echo "Installing version $PACKAGE_VERSION"
+
+    create_system_user_if_necessary medic-api
   fi
   return "$?"
 }
 
 install "$@"
 exit "$?"
-
