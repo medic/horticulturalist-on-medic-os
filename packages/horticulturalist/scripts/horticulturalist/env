@@ -18,3 +18,26 @@ merge_environment()
   return 0
 }
 
+get_couchdb_config_port() #todo move this to utils somewhere
+{
+  local couch_version="$(couchdb -V | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -oE '[0-9]+' | head -1)"
+  if [ "$couch_version" = "1" ]
+  then
+    echo '5984'
+  else
+    echo '5986'
+  fi
+}
+
+get_concierge_password() #todo move this to utils somewhere
+{
+  local passwd_file="$PACKAGE_STORAGE/../concierge/passwd/concierge"
+  echo "$(cat $passwd_file)"
+}
+
+get_couchdb_as_concierge_url()
+{
+  local concierge_password="$(get_concierge_password)"
+  local port="$(get_couchdb_config_port)"
+  echo "http://concierge:${concierge_password}@localhost:${port}"
+}
