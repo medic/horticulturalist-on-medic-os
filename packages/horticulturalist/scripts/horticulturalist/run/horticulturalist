@@ -1,5 +1,39 @@
 #!/bin/sh -e
 
+get_couchdb_config_port() #todo move this to utils somewhere
+{
+  local couch_version="$(couchdb -V | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -oE '[0-9]+' | head -1)"
+  if [ "$couch_version" = "1" ]
+  then
+    echo '5984'
+  else
+    echo '5986'
+  fi
+}
+
+get_concierge_password() #todo move this to utils somewhere
+{
+  local passwd_file="$PACKAGE_STORAGE/../concierge/passwd/concierge"
+  echo "$(cat $passwd_file)"
+}
+
+random_password() #todo move this to utils somewhere
+{
+  echo 'a_random_password'
+}
+
+create_couch_user() #todo move this to utils somewhere
+{
+  local name="$1"
+  local concierge_password="$(get_concierge_password)"
+  local port="$(get_couchdb_config_port)"
+  local couch_as_concierge="http://admin:${concierge_password}@localhost:${port}"
+  local password="$(random_password)"
+  curl -qX PUT "${couch_as_concierge}/_config/admins/${name}" -d "\"${password}\"" >/dev/null 2>&1
+  # todo error catching?
+  echo "$password"
+}
+
 start()
 {
   local self="`realpath "$0"`"
@@ -11,16 +45,14 @@ start()
   source "$base/../env" &&
   merge_environment /srv &&
   \
-  local passwd_file="$PACKAGE_STORAGE/../concierge/passwd/gardener" &&
-  local passwd=`cat $passwd_file` &&
-  \
   local logs="$PACKAGE_STORAGE/logs" &&
   mkdir -p $logs &&
   \
   mkdir -p $PACKAGE_SOFTWARE &&
   \
   export COUCH_NODE_NAME='couchdb@localhost' &&
-  export COUCH_URL="http://gardener:$passwd@localhost:5984/medic" &&
+  local password=$(create_couch_user $name) &&
+  export COUCH_URL="http://${name}:${password}@localhost:5984/medic" &&
   \
   local script="src/index.js" &&
   local run_cmd="'`which node`' '$script'" &&
