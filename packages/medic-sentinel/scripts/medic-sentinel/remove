@@ -16,6 +16,8 @@ remove()
 
   package_remove_empty_directories "$PACKAGE_NAME"
 
+  remove_couch_user
+
   return "$?"
 }
 

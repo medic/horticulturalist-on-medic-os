@@ -6,6 +6,9 @@ remove()
   local self="`realpath "$0"`"
   local base="`dirname -- "$self"`"
 
+  source "$base/../medic-core/env" &&
+  merge_environment /srv &&
+  \
   source "$base/env" &&
   merge_environment /srv || return 255
 
@@ -15,6 +18,8 @@ remove()
     "$PACKAGE_SCRIPTS" "$PACKAGE_STORAGE"/*/logs
 
   package_remove_empty_directories "$PACKAGE_NAME"
+
+  remove_couch_user
 
   return "$?"
 }

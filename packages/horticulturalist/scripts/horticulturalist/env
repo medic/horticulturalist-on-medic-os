@@ -54,10 +54,10 @@ random_password() #todo move this to utils somewhere
 
 create_couch_user() #todo move this to utils somewhere
 {
-  local username="$1"
+  echo "Adding couchdb user ${PACKAGE_NAME}"
   local couch_as_concierge="$(get_couchdb_as_concierge_url)"
   local password="$(random_password)"
-  curl -qX PUT "${couch_as_concierge}/_config/admins/${username}" -d "\"${password}\"" >/dev/null 2>&1
+  curl -qX PUT "${couch_as_concierge}/_config/admins/${PACKAGE_NAME}" -d "\"${password}\"" >/dev/null 2>&1
   # todo error catching?
   echo "$password" > "${COUCH_PASSWD_FILE}"
   chmod 600 "${COUCH_PASSWD_FILE}"

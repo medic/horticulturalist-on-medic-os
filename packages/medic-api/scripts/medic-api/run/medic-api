@@ -11,8 +11,7 @@ start()
   source "$base/../env" &&
   merge_environment /srv &&
   \
-  local passwd_file="$PACKAGE_STORAGE/../concierge/passwd/gardener" &&
-  local passwd=`cat $passwd_file` &&
+  local passwd=`cat $COUCH_PASSWD_FILE` &&
   \
   local logs="$PACKAGE_STORAGE/logs" &&
   mkdir -p $logs &&
@@ -20,14 +19,13 @@ start()
   mkdir -p $PACKAGE_SOFTWARE &&
   \
   export COUCH_NODE_NAME='couchdb@localhost' &&
-  export COUCH_URL="http://gardener:$passwd@localhost:5984/medic" &&
+  export COUCH_URL="http://${PACKAGE_NAME}:$passwd@localhost:5984/medic" &&
   \
   local run_cmd="'`which node`' '$PACKAGE_SOFTWARE/current/server.js'" &&
   \
   exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $run_cmd" medic-api \
       >> "$logs/medic-api.log" 2>&1
   # expecting script to be copied to $PACKAGE_SOFTWARE/current (see ../env)
-  # todo running as gardener user, don't know if that's ideal
 }
 
 start

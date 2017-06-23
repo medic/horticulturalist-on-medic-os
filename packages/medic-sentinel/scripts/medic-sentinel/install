@@ -22,6 +22,9 @@ install()
   local self="`realpath "$0"`"
   local base="`dirname -- "$self"`"
 
+  source "$base/../medic-core/env" &&
+  merge_environment /srv &&
+  \
   source "$base/env" &&
   merge_environment /srv || return 255
 
@@ -29,7 +32,7 @@ install()
     echo "Updating version $PACKAGE_VERSION"
   else
     echo "Installing version $PACKAGE_VERSION"
-
+    create_couch_user
     create_system_user_if_necessary medic-sentinel
   fi
   return "$?"

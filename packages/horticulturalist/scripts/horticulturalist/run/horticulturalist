@@ -1,10 +1,5 @@
 #!/bin/sh -e
 
-read_password()
-{
-  cat $COUCH_PASSWD_FILE
-}
-
 start()
 {
   local self="`realpath "$0"`"
@@ -22,7 +17,7 @@ start()
   mkdir -p $PACKAGE_SOFTWARE &&
   \
   export COUCH_NODE_NAME='couchdb@localhost' &&
-  local password=$(read_password) &&
+  local password=$(cat $COUCH_PASSWD_FILE) &&
   export COUCH_URL="http://${PACKAGE_NAME}:${password}@localhost:5984/medic" &&
   \
   local script="src/index.js" &&
