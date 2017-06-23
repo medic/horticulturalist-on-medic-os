@@ -25,7 +25,7 @@ start()
   local script="server.js" &&
   local run_cmd="'`which node`' '$script'" &&
   \
-  exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $run_cmd" gardener \
+  exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $run_cmd" medic-api \
       >> "$logs/startup.log" 2>&1
   # expecting script to be copied to $PACKAGE_SOFTWARE/current (see ../env)
   # todo running as gardener user, don't know if that's ideal
