@@ -22,8 +22,7 @@ start()
   export COUCH_NODE_NAME='couchdb@localhost' &&
   export COUCH_URL="http://gardener:$passwd@localhost:5984/medic" &&
   \
-  local script="server.js" &&
-  local run_cmd="'`which node`' '$script'" &&
+  local run_cmd="'`which node`' '$PACKAGE_SOFTWARE/current/server.js'" &&
   \
   exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $run_cmd" medic-api \
       >> "$logs/medic-api.log" 2>&1
