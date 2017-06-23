@@ -1,14 +1,6 @@
 #!/bin/sh
 source '/boot/include/package'
 
-remove_couch_user()
-{
-  echo "Removing couchdb user ${PACKAGE_NAME}"
-  local couch_as_concierge=$(get_couchdb_as_concierge_url)
-  curl -X DELETE "${couch_as_concierge}/_config/admins/${PACKAGE_NAME}" >/dev/null 2>&1
-  # todo error catching?
-}
-
 remove()
 {
   local self="`realpath "$0"`"

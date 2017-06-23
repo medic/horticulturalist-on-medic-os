@@ -1,18 +1,8 @@
 #!/bin/sh -e
 
-random_password() #todo move this to utils somewhere
+read_password()
 {
-  echo "$(openssl rand -hex 256)"
-}
-
-create_couch_user() #todo move this to utils somewhere
-{
-  local name="$1"
-  local couch_as_concierge=$(get_couchdb_as_concierge_url)
-  local password="$(random_password)"
-  curl -qX PUT "${couch_as_concierge}/_config/admins/${name}" -d "\"${password}\"" >/dev/null 2>&1
-  # todo error catching?
-  echo "$password"
+  cat $COUCH_PASSWD_FILE
 }
 
 start()
@@ -32,7 +22,7 @@ start()
   mkdir -p $PACKAGE_SOFTWARE &&
   \
   export COUCH_NODE_NAME='couchdb@localhost' &&
-  local password=$(create_couch_user $PACKAGE_NAME) &&
+  local password=$(read_password) &&
   export COUCH_URL="http://${PACKAGE_NAME}:${password}@localhost:5984/medic" &&
   \
   local script="src/index.js" &&

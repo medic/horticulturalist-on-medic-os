@@ -15,12 +15,17 @@ merge_environment()
   export PACKAGE_SOFTWARE="$prefix/software/$name"
   export PACKAGE_SETTINGS="$prefix/settings/$name"
 
+  mkdir -p "${PACKAGE_STORAGE}/passwd"
+  chmod 600 "${PACKAGE_STORAGE}/passwd"
+  export COUCH_PASSWD_FILE="${PACKAGE_STORAGE}/passwd/couchdb"
+
+  export MEDIC_CORE_PACKAGE_ROOT="$PACKAGE_ROOT"
   return 0
 }
 
 get_couchdb_config_port() #todo move this to utils somewhere
 {
-  local couch_version="$(couchdb -V | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -oE '[0-9]+' | head -1)"
+  local couch_version="$($MEDIC_CORE_PACKAGE_ROOT/bin/couchdb -V | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -oE '[0-9]+' | head -1)"
   if [ "$couch_version" = "1" ]
   then
     echo '5984'
@@ -40,4 +45,29 @@ get_couchdb_as_concierge_url()
   local concierge_password="$(get_concierge_password)"
   local port="$(get_couchdb_config_port)"
   echo "http://concierge:${concierge_password}@localhost:${port}"
+}
+
+random_password() #todo move this to utils somewhere
+{
+  echo "$($MEDIC_CORE_PACKAGE_ROOT/bin/openssl rand -hex 256)"
+}
+
+create_couch_user() #todo move this to utils somewhere
+{
+  local username="$1"
+  local couch_as_concierge=$(get_couchdb_as_concierge_url)
+  local password="$(random_password)"
+  curl -qX PUT "${couch_as_concierge}/_config/admins/${username}" -d "\"${password}\"" >/dev/null 2>&1
+  # todo error catching?
+  echo "$password" > "${COUCH_PASSWD_FILE}"
+  chmod 600 "${COUCH_PASSWD_FILE}"
+}
+
+remove_couch_user()
+{
+  echo "Removing couchdb user ${PACKAGE_NAME}"
+  local couch_as_concierge=$(get_couchdb_as_concierge_url)
+  curl -X DELETE "${couch_as_concierge}/_config/admins/${PACKAGE_NAME}" >/dev/null 2>&1
+  # todo error catching?
+  rm $COUCH_PASSWD_FILE
 }
