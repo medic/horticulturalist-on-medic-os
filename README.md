@@ -5,3 +5,4 @@ TODO
  - catch errors in couchdb user creation and deletion
  - run sentinel and api with their own couchdb users.
  - convert in-core 'todo' labels to upper-case 'TODO'
+ - remove medic-api and medic-sentinel system users on uninstall
