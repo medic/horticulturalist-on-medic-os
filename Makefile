@@ -1,3 +1,4 @@
+.PHONY: all medic-sentinel medic-api horticulturalist clean
 
 all: medic-sentinel medic-api horticulturalist
 
