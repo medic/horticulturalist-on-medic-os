@@ -16,3 +16,6 @@ horticulturalist:
 clean:
 	rm -f output/packages/* staging/packages/*/*
 
+.PHONY: alex
+alex: all
+	scp -P 33696 output/packages/*.vpkg vm@alpha.dev.medicmobile.org:alex/
