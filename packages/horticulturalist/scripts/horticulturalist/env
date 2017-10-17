@@ -2,7 +2,7 @@
 
 merge_environment()
 {
-  local version='0.0.1'
+  local version='0.6.0'
   local name='horticulturalist'
 
   local prefix="$1"
@@ -70,4 +70,15 @@ remove_couch_user()
   curl -X DELETE "${couch_as_concierge}/_config/admins/${PACKAGE_NAME}" >/dev/null 2>&1
   # todo error catching?
   rm $COUCH_PASSWD_FILE
+}
+
+bootstrap()
+{
+  echo "Bootstrapping"
+  export COUCH_NODE_NAME='couchdb@localhost' &&
+  local password=$(cat $COUCH_PASSWD_FILE) &&
+  export COUCH_URL="http://${PACKAGE_NAME}:${password}@localhost:5984/medic" &&
+  local node=`which node` &&
+  cd "$PACKAGE_SOFTWARE/current" &&
+  su -c "$node src/index.js --medic-os --only-bootstrap=@beta"
 }

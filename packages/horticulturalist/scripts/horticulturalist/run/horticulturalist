@@ -21,7 +21,7 @@ start()
   export COUCH_URL="http://${PACKAGE_NAME}:${password}@localhost:5984/medic" &&
   \
   local script="src/index.js" &&
-  local run_cmd="'`which node`' '$script'" &&
+  local run_cmd="'`which node`' '$script' --medic-os" &&
   \
   exec /boot/timestamp su -c "cd '$PACKAGE_SOFTWARE/current' && exec $run_cmd" \
       >> "$logs/horticulturalist.log" 2>&1

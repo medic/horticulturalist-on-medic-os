@@ -19,6 +19,7 @@ install()
   else
     echo "Installing version $PACKAGE_VERSION"
     create_couch_user
+    bootstrap
   fi
 
   return "$?"
