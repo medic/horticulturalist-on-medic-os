@@ -15,7 +15,7 @@ If you want to update the actual version of Horti, use `git submodule` to locate
 
 `make` builds the packages and puts them in `output/packages`.
 
-SCP those packages up to the desired server.
+Use eg `scp` to push `output/packages/*` up to the desired server. It doesn't matter where they go, you are just going to refer to them below (ie your home directory is fine).
 
 Then:
 ```
